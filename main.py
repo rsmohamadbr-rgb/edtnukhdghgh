@@ -5,24 +5,22 @@ import os
 from telethon import TelegramClient
 from telethon.tl.functions.account import UpdateProfileRequest
 
-# إعدادات الحساب الشخصي (اتركها فارغة أو ضعها إذا كنت تستخدم حساب شخصي)
-API_ID = os.environ.get("25531882")       # ضع رقم الـ API ID هنا أو كمتغير بيئة
-API_HASH = os.environ.get("1357697ae77bb729fb1b788a1add000e")   # ضع الـ API HASH هنا أو كمتغير بيئة
+# قراءة المتغيرات من البيئة (Railway) مع وضع القيم الافتراضية تلقائياً
+API_ID = int(os.environ.get("API_ID", 25531882))
+API_HASH = os.environ.get("API_HASH", "1357697ae77bb729fb1b788a1add000e")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8735176234:AAH2XvvQD1knprH44HRyE64533CSusK6pIo")
+BASE_NAME = os.environ.get("BASE_NAME", "ZAD nvr run")
 
-# ★ ضع توكن البوت هنا مباشرة أو عبر متغير بيئة إذا كنت تريد استخدام بوت
-BOT_TOKEN = os.environ.get("8735176234:AAH2XvvQD1knprH44HRyE64533CSusK6pIo") or "ضع_توكن_البوت_هنا_إذا_أردت"
-
-BASE_NAME = "ZAD nvr run"
 SESSION_NAME = "session_name"
 
-# إنشاء العميل: إذا توفر توكن البوت سيستخدمه، وإلا سيستخدم API_ID و API_HASH للحساب الشخصي
-if BOT_TOKEN and BOT_TOKEN != "ضع_توكن_البوت_هنا_إذا_أردت":
+# إنشاء العميل باستخدام توكن البوت
+if BOT_TOKEN:
     client = TelegramClient(SESSION_NAME, api_id=6, api_hash="eb06d4abfb49dc3eeb1aeb98ae0f581e").start(bot_token=BOT_TOKEN)
 else:
     client = TelegramClient(
         SESSION_NAME,
-        int(API_ID) if API_ID else 0,
-        API_HASH if API_HASH else ""
+        API_ID,
+        API_HASH
     )
 
 def to_fancy_digits(text):
@@ -35,7 +33,6 @@ def to_fancy_digits(text):
     return str(text).translate(digits_map)
 
 async def update_time_name():
-    # إذا لم يتم البدء تلقائياً عبر .start(bot_token=...) نقوم ببدئه هنا
     if not client.is_connected():
         await client.start()
 
