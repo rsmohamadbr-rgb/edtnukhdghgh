@@ -31,9 +31,15 @@ def run_web_server():
 threading.Thread(target=run_web_server, daemon=True).start()
 
 # ==================== إعدادات المطور وحماية المفاتيح (بدون معلومات سرية) ====================
-API_ID = int(os.environ.get("API_ID", 0))
-API_HASH = os.environ.get("API_HASH", "")
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+from telethon import TelegramClient
+import os
+
+API_ID = int(os.environ.get("API_ID"))
+API_HASH = os.environ.get("API_HASH")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+
+# تعريف العميل الخاص بالبوت (تأكد ألا تمرر جلسة مستخدم هنا)
+bot = TelegramClient('bot_session', API_ID, API_HASH)
 
 # معرف القروب المستهدف (تأكد أن البوت مشرف فيه)
 TARGET_CHAT_ID = int(os.environ.get("TARGET_CHAT_ID", 0))
